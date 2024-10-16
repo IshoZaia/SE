@@ -1,24 +1,31 @@
-import logo from './logo.svg';
-import './App.css';
-
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import Register from './components/Register';
+import Login from './components/Login';
+import CoursesPage from './components/Courses';
+import QuestionsPage from './components/Questions';
+import PreviousQuestionsPage from './components/PreviousQuestions';
+import PrivateRoute from './components/PrivateRoute';
+import Navbar from './components/Partials/Navbar';
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Navbar /> {/* Render Navbar */}
+      <Routes>
+        {/* Public Routes */}
+        <Route path="/register" element={<Register />} />
+        <Route path="/login" element={<Login />} />
+
+        {/* Private Routes */}
+        <Route element={<PrivateRoute />}>
+          <Route path="/courses" element={<CoursesPage />} />
+          <Route path="/courses/:courseId/questions/:userId" element={<QuestionsPage />} />
+          <Route path="/courses/:courseId/previous-questions" element={<PreviousQuestionsPage />} />
+        </Route>
+
+        {/* Redirect all other routes to login */}
+        <Route path="*" element={<Navigate to="/login" replace />} />
+      </Routes>
+    </Router>
   );
 }
 
